@@ -244,6 +244,12 @@ pub fn configure_linux_graphics() {
             "[harbor::mpv_linux] NVIDIA + Wayland detected; setting __NV_DISABLE_EXPLICIT_SYNC=1"
         );
         std::env::set_var("__NV_DISABLE_EXPLICIT_SYNC", "1");
+        if std::env::var("WEBKIT_DISABLE_DMABUF_RENDERER").is_err() {
+            eprintln!(
+                "[harbor::mpv_linux] NVIDIA + Wayland detected; setting WEBKIT_DISABLE_DMABUF_RENDERER=1"
+            );
+            std::env::set_var("WEBKIT_DISABLE_DMABUF_RENDERER", "1");
+        }
     }
 }
 
