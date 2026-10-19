@@ -1,0 +1,31 @@
+# Maintainer: canonrebel04
+pkgname=harbor-stremio-fork-bin
+_pkgname=harbor
+pkgver=0.9.132
+pkgrel=1
+pkgdesc='A Custom Stremio Client Built for Adventure (Built from canonrebel04 fork)'
+arch=('x86_64')
+url='https://github.com/canonrebel04/harbor'
+license=('MIT')
+depends=('ffmpeg' 'gst-libav' 'gst-plugins-bad' 'gst-plugins-good' 'gtk3' 'libayatana-appindicator' 'mpv' 'systemd-libs' 'webkit2gtk-4.1' 'yt-dlp')
+provides=('harbor-stremio-beta' 'harbor')
+conflicts=('harbor-stremio-beta-bin' 'harbor-stremio-bin' 'harbor-stremio' 'harbor' 'harbor-stremio-git')
+
+package() {
+  install -Dm755 "$startdir/../../src-tauri/target/release/harbor" "$pkgdir/usr/bin/harbor"
+  ln -s harbor "$pkgdir/usr/bin/harbor-stremio"
+
+  mkdir -p "$pkgdir/usr/lib/Harbor Beta"
+  cp -r "$startdir/../../src-tauri/fonts" "$pkgdir/usr/lib/Harbor Beta/"
+  cp -r "$startdir/../../src-tauri/resources" "$pkgdir/usr/lib/Harbor Beta/"
+
+  if [ -f "/usr/lib/Harbor Beta/notices" ]; then
+    install -Dm644 "/usr/lib/Harbor Beta/notices" "$pkgdir/usr/lib/Harbor Beta/notices"
+  fi
+
+  if [ -f "$startdir/harbor.desktop" ]; then
+    install -Dm644 "$startdir/harbor.desktop" "$pkgdir/usr/share/applications/harbor.desktop"
+  elif [ -f "/home/cachy/.local/share/applications/harbor-handler.desktop" ]; then
+    install -Dm644 "/home/cachy/.local/share/applications/harbor-handler.desktop" "$pkgdir/usr/share/applications/harbor.desktop"
+  fi
+}
